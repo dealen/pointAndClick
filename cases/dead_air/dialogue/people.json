@@ -1,0 +1,307 @@
+{
+	"pike": [
+		{"if": "visits.pike == 1", "say": "pike", "text": "I've secured the scene, {sir}. Nobody in or out. Except you. And the coroner. And Mr. Hale, who popped in for his reading glasses."},
+		{"if": "visits.pike == 1", "say": "me", "text": "So, secured in the sense that a sieve is."},
+		{"goto": "pike_hub"}
+	],
+	"pike_hub": [
+		{"choice": [
+			{"text": "Tell me about the producer.", "goto": "pike_marla"},
+			{"text": "Tell me about the manager.", "goto": "pike_gordon"},
+			{"text": "What do you make of it, Pike?", "once": true, "goto": "pike_theory"},
+			{"text": "I'm ready to name someone.", "if": "talked_marla and talked_gordon", "goto": "accuse"},
+			{"text": "Carry on.", "goto": "end"}
+		]}
+	],
+	"pike_marla": [
+		{"say": "pike", "text": "Marla Quint. Eleven years on the show. She's in the control room, behind the glass. She rang it in at ten past three. You can talk to her on the intercom."},
+		{"say": "pike", "text": "She hasn't cried. The book says that's suspicious."},
+		{"say": "me", "text": "The book has never worked nights."},
+		{"goto": "pike_hub"}
+	],
+	"pike_gordon": [
+		{"say": "pike", "text": "Gordon Hale, station manager. Over by the door; you'll need to turn round. He came across from Rudy's bar when he saw our cars."},
+		{"say": "pike", "text": "He's asked twice when he can have his booth back."},
+		{"say": "me", "text": "Grief takes people differently. Some of them go straight to real estate."},
+		{"goto": "pike_hub"}
+	],
+	"pike_theory": [
+		{"say": "pike", "text": "Honestly? Burglary gone wrong."},
+		{"say": "me", "text": "What was taken?"},
+		{"say": "pike", "text": "...Nothing. That's what went wrong."},
+		{"goto": "pike_hub"}
+	],
+	"pike_nudge": [
+		{"say": "pike", "text": "{sir}. Mr. Hale's started to sweat. The book says that's significant."},
+		{"say": "me", "text": "For once, Pike, the book and I agree. Come and find me when it's time to name someone. Or I'll find you."}
+	],
+
+	"accuse": [
+		{"say": "pike", "text": "Who is it, {sir}?"},
+		{"choice": [
+			{"text": "Gordon Hale.", "goto": "accuse_gordon"},
+			{"text": "Marla Quint.", "goto": "accuse_marla"},
+			{"text": "Not yet.", "goto": "end"}
+		]}
+	],
+	"accuse_gordon": [
+		{"if": "gordon_cracks >= 3", "goto": "gordon_solid"},
+		{"if": "gordon_cracks >= 1", "goto": "gordon_thin"},
+		{"say": "pike", "text": "On what, {sir}?"},
+		{"say": "me", "text": "On his face, mostly."},
+		{"say": "pike", "text": "I don't think the DA accepts faces."},
+		{"say": "", "text": "You have nothing that contradicts Gordon Hale yet. Show him evidence first."}
+	],
+	"gordon_solid": [
+		{"say": "me", "text": "Mr. Hale. You went home at eleven, you say."},
+		{"if": "gordon_car_shown", "say": "me", "text": "Your car didn't. It was in the lot at four minutes past one."},
+		{"if": "gordon_letter_shown", "say": "me", "text": "And you were in this booth after 12:40, with a red pen and an opinion."},
+		{"if": "gordon_alibi_broken", "say": "me", "text": "You spent the rest of the night at Rudy's, making sure a whole bar listened to a tape you'd started yourself."},
+		{"if": "gordon_amateur_shown", "say": "me", "text": "And you threaded it like a man who signs the cheques for the people who thread it."},
+		{"say": "gordon", "text": "He was walking out on Friday. Thirty-one years I've kept this station breathing."},
+		{"say": "me", "text": "And tonight you kept him talking for seventy minutes after he'd stopped. Say what you like, Mr. Hale. That's management."},
+		{"say": "pike", "text": "Gordon Hale, you have the right to remain silent."},
+		{"do": ["remember You closed the Calloway case with evidence that will stand up.", "finish gordon_solid"],
+		 "say": "me", "text": "At this station, that's a change of format."}
+	],
+	"gordon_thin": [
+		{"say": "me", "text": "Mr. Hale, I'm arresting you for the murder of Desmond Calloway."},
+		{"say": "gordon", "text": "On what? One loose thread and a feeling? My lawyer has eaten breakfast on more than that."},
+		{"say": "pike", "text": "{sir}, are we sure we've got enough?"},
+		{"choice": [
+			{"text": "We've got the right man. The rest is paperwork.", "goto": "gordon_thin_go"},
+			{"text": "...No. Not yet.", "goto": "end"}
+		]}
+	],
+	"gordon_thin_go": [
+		{"do": ["add trait.cynicism 1", "remember You arrested Gordon Hale before the case against him was finished.", "finish gordon_thin"],
+		 "say": "pike", "text": "Gordon Hale, you have the right to remain silent. Which the book says you should strongly consider."}
+	],
+	"accuse_marla": [
+		{"say": "me", "text": "Ms. Quint. It's your tape and your key. Your handwriting stops at 1:04, and somebody Dez called 'the Boss' walks in at 1:26."},
+		{"say": "marla", "text": "He called me that because I told him when to stop talking. It's the only promotion I ever got."},
+		{"say": "marla", "text": "Eleven years, Detective. Do you honestly think I'd thread it wrong?"},
+		{"if": "clue.reel_threading", "say": "me", "text": "(She wouldn't. I know she wouldn't.)"},
+		{"choice": [
+			{"text": "[Arrest her.]", "goto": "marla_wrong"},
+			{"text": "[Back off.]", "goto": "end"}
+		]}
+	],
+	"marla_wrong": [
+		{"say": "pike", "text": "Marla Quint, you have the right to remain silent."},
+		{"say": "marla", "text": "I've had eleven years of practice."},
+		{"do": ["remember You charged Marla Quint with a murder she didn't commit.", "finish marla_wrong"],
+		 "say": "gordon", "text": "Tragic. Truly. Pike, was it? When can I have my booth back?"}
+	],
+
+	"marla": [
+		{"if": "visits.marla == 1", "say": "", "text": "You hold down the talkback button. The woman behind the glass takes her time looking up."},
+		{"if": "visits.marla == 1", "do": ["set talked_marla true"], "say": "marla", "text": "Keep the button held, Detective, or I only get half of every sentence. Story of my life."},
+		{"goto": "marla_hub"}
+	],
+	"marla_hub": [
+		{"if": "marla_admitted and marla_trust >= 1 and not clue.gordon_car", "goto": "marla_car"},
+		{"choice": [
+			{"text": "Walk me through tonight.", "goto": "marla_night"},
+			{"text": "Tell me about Dez.", "goto": "marla_dez"},
+			{"text": "The tape. 'In case of Dez.'", "if": "clue.reel_tape", "goto": "marla_tape"},
+			{"text": "Who has keys to the tape cabinet?", "if": "clue.cabinet", "goto": "marla_keys"},
+			{"text": "[Show her something.]", "goto": "marla_show"},
+			{"text": "That's all for now.", "goto": "end"}
+		]}
+	],
+	"marla_night": [
+		{"if": "marla_admitted", "say": "marla", "text": "You know it now. I walked out at 1:04. I came back at three to apologise to him, God help me."},
+		{"if": "marla_admitted", "goto": "marla_hub"},
+		{"say": "marla", "text": "I was at the board all night. Dez did the show. At ten past three I looked up and he wasn't moving."},
+		{"say": "marla", "text": "I thought he'd passed out. It wouldn't have been the first time. It wouldn't have been the fortieth."},
+		{"goto": "marla_hub"}
+	],
+	"marla_dez": [
+		{"say": "marla", "text": "He could make a stranger feel like the only other person awake in the city. He did it four hours a night. Then he went home and didn't return a single call."},
+		{"say": "marla", "text": "He was wonderful to everyone he'd never met."},
+		{"goto": "marla_hub"}
+	],
+	"marla_tape": [
+		{"say": "marla", "text": "I cut it two years ago. Seventy minutes of his best calls, trimmed so nobody mentions a date. For the nights he couldn't stand up."},
+		{"say": "marla", "text": "I've used it six times. The ratings were fine. Nobody ever told him."},
+		{"say": "me", "text": "And tonight?"},
+		{"if": "marla_admitted", "say": "marla", "text": "Not me. I wasn't here to play it. And I'd have threaded it properly. I can load that deck in the dark. I have."},
+		{"if": "not marla_admitted", "say": "marla", "text": "I didn't play it."},
+		{"if": "not marla_admitted", "say": "me", "text": "You were at the board all night and didn't notice the show had turned into a recording?"},
+		{"if": "not marla_admitted", "say": "marla", "text": "...It's a very good tape."},
+		{"goto": "marla_hub"}
+	],
+	"marla_keys": [
+		{"say": "marla", "text": "Two keys. Mine and Gordon's. He's never used his. He once asked me which end of a cassette was the front."},
+		{"goto": "marla_hub"}
+	],
+	"marla_show": [
+		{"prompt": "Show Marla...", "present": {
+			"call_sheet": "marla_caught",
+			"empty_chair": "marla_caught",
+			"letter": "marla_letter",
+			"iris_statement": "marla_boss"
+		}, "else": "marla_shrug", "cancel": "marla_hub"}
+	],
+	"marla_shrug": [
+		{"say": "marla", "text": "I don't know what you want me to say about that, Detective. I produce. I don't interpret."},
+		{"goto": "marla_hub"}
+	],
+	"marla_boss": [
+		{"say": "marla", "text": "'The Boss.' That was me, on air. A running bit. He'd say, 'The Boss says wrap it up,' and I'd play a whip crack."},
+		{"say": "marla", "text": "Off air he only ever called one person boss, and he didn't mean it kindly."},
+		{"goto": "marla_hub"}
+	],
+	"marla_caught": [
+		{"if": "marla_admitted", "say": "marla", "text": "We've done this one, Detective. I left. I'm not proud of it."},
+		{"if": "marla_admitted", "goto": "marla_hub"},
+		{"say": "me", "text": "Your call sheet stops at 1:04. At 1:26, line three got through to Dez without anyone screening it. You weren't at the board, Ms. Quint."},
+		{"say": "marla", "text": "..."},
+		{"choice": [
+			{"text": "Take your time.", "do": ["add marla_trust 1", "add trait.empathy 1"]},
+			{"text": "Eleven years of live radio, and now you go quiet?", "do": ["add trait.cynicism 1"]}
+		]},
+		{"say": "marla", "text": "At one o'clock, during the news, he told me he was leaving. Coastal Radio. Syndication. I asked where I fitted in. He said, 'Marla, they have producers there.'"},
+		{"say": "marla", "text": "So I logged Walter and his ex-wife's boat, put the pencil down, and walked out. Eleven years, and the only time I've ever left a live show."},
+		{"say": "marla", "text": "I sat in my car by the river and listened to him carry on perfectly well without me."},
+		{"say": "me", "text": "Except it wasn't him."},
+		{"say": "marla", "text": "No. I recognised the Owl's sister's wedding. I thought, the old bastard's found my tape. I was nearly flattered."},
+		{"do": ["set marla_admitted true", "clue marla_statement"],
+		 "say": "marla", "text": "I lied because walking off a live board is the one thing you don't do. Isn't that stupid? He's dead, and I was worried about my reference."},
+		{"goto": "marla_hub"}
+	],
+	"marla_letter": [
+		{"if": "marla_letter_done", "say": "marla", "text": "I've seen it, Detective. Once was plenty."},
+		{"if": "marla_letter_done", "goto": "marla_hub"},
+		{"do": ["set marla_letter_done true"], "say": "marla", "text": "'A chair that reclines.' That's what he put. Eleven years and he's leaving for furniture."},
+		{"say": "marla", "text": "Does he say anything about the show? About... any of us?"},
+		{"choice": [
+			{"text": "He mentions you. Says you were the best part of it. (Lie)", "goto": "marla_lie"},
+			{"text": "He doesn't mention you. I'm sorry.", "goto": "marla_truth"},
+			{"text": "[Say nothing.]", "goto": "marla_silence"}
+		]}
+	],
+	"marla_lie": [
+		{"say": "marla", "text": "...Did he."},
+		{"do": ["set world.lied_to_marla true", "add marla_trust 1", "remember You told Marla Quint that Dez's letter praised her. It doesn't mention her."],
+		 "say": "marla", "text": "Thank you. For telling me that."},
+		{"goto": "marla_hub"}
+	],
+	"marla_truth": [
+		{"do": ["add trait.bythebook 1", "add marla_trust 1"], "say": "marla", "text": "No. Well. He'd have had to stop talking about himself for a whole line."},
+		{"say": "marla", "text": "Thank you for not dressing it up. People do, around here. It's a hazard of the trade."},
+		{"goto": "marla_hub"}
+	],
+	"marla_silence": [
+		{"say": "marla", "text": "No. I thought not."},
+		{"goto": "marla_hub"}
+	],
+	"marla_car": [
+		{"say": "marla", "text": "One more thing, since you've been decent with me. When I walked out at 1:04, Gordon's car was in the lot. The green one, in the space with his name on it."},
+		{"do": ["clue gordon_car"], "say": "marla", "text": "He'll have told you he goes home at eleven. He does, usually. His car didn't."},
+		{"goto": "marla_hub"}
+	],
+
+	"gordon": [
+		{"if": "visits.gordon == 1", "say": "gordon", "text": "Detective. Gordon Hale, I manage the station. Terrible thing. Terrible. Do you have any idea how long the booth will be... unavailable?"},
+		{"if": "visits.gordon == 1", "say": "me", "text": "Do you have another host?"},
+		{"if": "visits.gordon == 1", "say": "gordon", "text": "No."},
+		{"if": "visits.gordon == 1", "do": ["set talked_gordon true"], "say": "me", "text": "Then I'd call it available."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_hub": [
+		{"choice": [
+			{"text": "Where were you tonight?", "goto": "gordon_night"},
+			{"text": "Did you know Dez was leaving?", "if": "clue.letter", "goto": "gordon_leaving"},
+			{"text": "What happens to the station now?", "goto": "gordon_station"},
+			{"text": "[Show him something.]", "if": "gordon_story", "goto": "gordon_show"},
+			{"text": "That's all for now.", "goto": "end"}
+		]}
+	],
+	"gordon_night": [
+		{"say": "gordon", "text": "Left here at eleven, same as always. I don't stay for the show. I've heard it."},
+		{"say": "gordon", "text": "Went home, couldn't settle, walked over to Rudy's about half past one. Stayed until the sirens."},
+		{"do": ["set gordon_story true"], "say": "gordon", "text": "We had the show on. The whole bar heard Dez take that Owl woman's call at a quarter past two. I said, 'That's my boy.' Ask anyone."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_leaving": [
+		{"say": "gordon", "text": "Leaving? Dez? That's news to me. Well. That's tragic twice over."},
+		{"say": "me", "text": "(He counted. People in shock don't usually count.)"},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_station": [
+		{"say": "gordon", "text": "We'll manage. There's insurance on him. Standard, for talent. A key-man policy. I'd forgotten all about it until tonight."},
+		{"say": "me", "text": "Until when tonight?"},
+		{"say": "gordon", "text": "...Until you asked."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_show": [
+		{"prompt": "Show Gordon...", "present": {
+			"tape_alibi": "gordon_alibi",
+			"letter": "gordon_letter",
+			"amateur": "gordon_amateur",
+			"gordon_car": "gordon_car",
+			"iris_statement": "gordon_iris",
+			"reel_tape": "gordon_tape",
+			"reel_threading": "gordon_tape",
+			"empty_chair": "gordon_chair"
+		}, "else": "gordon_shrug", "cancel": "gordon_hub"}
+	],
+	"gordon_shrug": [
+		{"say": "gordon", "text": "I'm sure that's very interesting to somebody."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_iris": [
+		{"say": "gordon", "text": "The Owl? She'd say anything to get on the air. That's the business model."},
+		{"say": "me", "text": "(Her word won't move him. I need what it adds up to.)"},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_tape": [
+		{"say": "gordon", "text": "Never seen it before. Tapes are Marla's department."},
+		{"say": "me", "text": "(Not enough on its own. I should work out what that tape means first.)"},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_chair": [
+		{"say": "gordon", "text": "Marla walked off a live show? Well, there you are. I'd look at her, if I were you. Which I'm glad I'm not."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_alibi": [
+		{"if": "gordon_alibi_broken", "say": "gordon", "text": "We've been over that."},
+		{"if": "gordon_alibi_broken", "goto": "gordon_hub"},
+		{"say": "me", "text": "The tape runs seventy minutes and it ran out at 2:40. It was started at half past one. What the whole bar heard at a quarter past two was a recording."},
+		{"say": "me", "text": "Your alibi, Mr. Hale, is that a tape recorder was working."},
+		{"do": ["set gordon_alibi_broken true", "add gordon_cracks 1"], "say": "gordon", "text": "Then that's Marla's doing. It's her tape. Ask her."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_letter": [
+		{"if": "gordon_letter_shown", "say": "gordon", "text": "I've explained the letter."},
+		{"if": "gordon_letter_shown", "goto": "gordon_hub"},
+		{"say": "me", "text": "You went home at eleven. He typed this at 12:40. And this is your pen."},
+		{"say": "gordon", "text": "...I came back for my reading glasses. He handed me that. I wrote something sharp on it and I left. He was alive and pleased with himself, same as ever."},
+		{"if": "visits.pike > 0", "say": "me", "text": "Those would be the reading glasses Officer Pike let you collect from a crime scene an hour ago."},
+		{"if": "visits.pike > 0", "say": "gordon", "text": "I own several pairs."},
+		{"say": "me", "text": "'Over my dead body.'"},
+		{"say": "gordon", "text": "It's a figure of speech."},
+		{"do": ["set gordon_letter_shown true", "add gordon_cracks 1"], "say": "me", "text": "It's a figure of something."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_amateur": [
+		{"if": "gordon_amateur_shown", "say": "gordon", "text": "Yes, yes. The threading. You said."},
+		{"if": "gordon_amateur_shown", "goto": "gordon_hub"},
+		{"say": "me", "text": "Whoever loaded that tape had a key to the cabinet and had never threaded the deck in their life. Marla Quint has done it every night for eleven years."},
+		{"say": "gordon", "text": "People make mistakes under stress."},
+		{"do": ["set gordon_amateur_shown true", "add gordon_cracks 1"], "say": "me", "text": "They do. They skip the tension arm, for one."},
+		{"goto": "gordon_hub"}
+	],
+	"gordon_car": [
+		{"if": "gordon_car_shown", "say": "gordon", "text": "I've told you about the car."},
+		{"if": "gordon_car_shown", "goto": "gordon_hub"},
+		{"say": "me", "text": "Your car was in the lot at 1:04."},
+		{"say": "gordon", "text": "Says who?"},
+		{"say": "me", "text": "Somebody who was leaving."},
+		{"say": "gordon", "text": "I walk home sometimes. For my heart."},
+		{"do": ["set gordon_car_shown true", "add gordon_cracks 1"], "say": "me", "text": "And then back to Rudy's, past your own car. For your heart."},
+		{"goto": "gordon_hub"}
+	]
+}

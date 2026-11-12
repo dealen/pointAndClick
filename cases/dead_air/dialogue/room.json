@@ -1,0 +1,193 @@
+{
+	"intro": [
+		{"say": "", "text": "Halcyon FM. 98.6 on the dial. 3:40 in the morning."},
+		{"say": "me", "text": "98.6. Body temperature. Somebody in marketing had a sense of humour. Or didn't, which is funnier."},
+		{"say": "pike", "text": "Detective {name}! Welcome back, {sir}. Not that you were anywhere. That anyone's told me about."},
+		{"say": "me", "text": "Good recovery, Pike. What do we have?"},
+		{"say": "pike", "text": "Desmond Calloway. 'Dez.' Hosts The Small Hours, midnight to four. It's a call-in show. Lonely people, mostly."},
+		{"say": "pike", "text": "His producer found him at ten past three. Coroner's been and gone. Says he died between one and two."},
+		{"choice": [
+			{"text": "Can he narrow that down?", "goto": "intro_narrow"},
+			{"text": "And?", "goto": "intro_rest"}
+		]}
+	],
+	"intro_narrow": [
+		{"say": "pike", "text": "I asked. He said he could, but then he'd only be wrong more precisely."},
+		{"goto": "intro_rest"}
+	],
+	"intro_rest": [
+		{"say": "pike", "text": "Here's the thing, {sir}. The show ran until 2:40. Callers and everything. I had it on in the car."},
+		{"say": "me", "text": "So either the coroner's wrong, or you spent an hour being kept company by a dead man."},
+		{"say": "pike", "text": "I did think he sounded tired."},
+		{"do": ["clue tod"], "say": "", "text": "Tap things to examine them. Swipe sideways to turn and face another wall. 'Look around' shows what's worth a tap."}
+	],
+
+	"body": [
+		{"if": "visits.body > 1", "say": "me", "text": "He isn't going to add anything. First time in thirty years."},
+		{"if": "visits.body > 1", "end": true},
+		{"say": "me", "text": "Desmond Calloway. One blow, back of the head. He was facing the glass and he stayed facing it."},
+		{"say": "pike", "text": "No defensive wounds, {sir}. The book says that means he trusted his killer."},
+		{"say": "me", "text": "Or he was mid-sentence. Radio people can't hear a thing while they're talking. I think that's the appeal."},
+		{"do": ["clue wound"], "say": "me", "text": "Still. You don't turn your back on a stranger. You turn it on somebody who's walked in a thousand times."}
+	],
+
+	"mic": [
+		{"say": "me", "text": "Still live, technically. Fifty thousand watts of a man not saying anything."},
+		{"if": "visits.mic == 1", "say": "pike", "text": "Should I switch it off?"},
+		{"if": "visits.mic == 1", "say": "me", "text": "Leave it. It's the most honest hour this station's ever broadcast."}
+	],
+
+	"mug": [
+		{"say": "me", "text": "Halcyon FM mug. Coffee, by the colour. Bourbon, by everything else."},
+		{"if": "not mug_done", "choice": [
+			{"text": "[Put it down.]", "goto": "mug_down"},
+			{"text": "[Smell it again.]", "goto": "mug_linger"}
+		]}
+	],
+	"mug_down": [
+		{"do": ["set mug_done true"], "say": "me", "text": "Three years, two months. I put it down."}
+	],
+	"mug_linger": [
+		{"do": ["set mug_done true", "set world.lingered_on_drink true", "remember You took a long second look at a dead man's bourbon."],
+		 "say": "me", "text": "Three years, two months. It still smells like a good idea."},
+		{"say": "pike", "text": "Is it evidence, {sir}?"},
+		{"say": "me", "text": "Not of anything new."}
+	],
+
+	"phone": [
+		{"if": "iris_done", "say": "me", "text": "Line three's dark now. First time tonight anyone at this station has hung up properly."},
+		{"if": "iris_done", "end": true},
+		{"say": "me", "text": "Line three is blinking. Someone's on hold."},
+		{"say": "pike", "text": "Since when?"},
+		{"say": "me", "text": "The little counter says an hour and fifty minutes. That isn't a caller, Pike. That's a hostage."},
+		{"choice": [
+			{"text": "[Pick up line three.]", "goto": "iris"},
+			{"text": "[Leave it for now.]", "goto": "end"}
+		]}
+	],
+
+	"iris": [
+		{"say": "iris", "text": "...Dez?"},
+		{"choice": [
+			{"text": "This is Detective {name}, city police. Who am I speaking to?", "goto": "iris_story"},
+			{"text": "Dez can't come to the phone.", "goto": "iris_cant"}
+		]}
+	],
+	"iris_cant": [
+		{"say": "iris", "text": "He said one second."},
+		{"say": "me", "text": "He was an optimist. This is Detective {name}. And you are?"},
+		{"goto": "iris_story"}
+	],
+	"iris_story": [
+		{"say": "iris", "text": "Iris. He calls me the Night Owl. I ring most nights. I've been holding since 1:26. I wrote it down. I write everything down; it's cheaper than being listened to."},
+		{"say": "me", "text": "You've been on hold for nearly two hours."},
+		{"say": "iris", "text": "I've held longer for the gas company, and they have never once asked after my sister."},
+		{"say": "me", "text": "What did he say before he put you on hold?"},
+		{"say": "iris", "text": "He said, 'Hang on, Owl. The Boss just walked in.' Then the hold music. It's his own theme tune. You'd think that would have warned me about him years ago."},
+		{"say": "iris", "text": "And then at a quarter past two I'm sat here, on hold, and I hear myself on the radio. Telling the one about my sister's wedding."},
+		{"say": "iris", "text": "I told that story in March. I was funnier in March."},
+		{"do": ["clue iris_statement", "set iris_done true"], "choice": [
+			{"text": "Thank you, Iris. You've helped more than you know.", "goto": "iris_kind"},
+			{"text": "Stay by your phone. An officer will take a statement.", "goto": "iris_book"},
+			{"text": "You can hang up now, ma'am.", "goto": "iris_cold"}
+		]}
+	],
+	"iris_kind": [
+		{"say": "iris", "text": "He's dead, isn't he."},
+		{"say": "me", "text": "Yes."},
+		{"do": ["set world.iris_kind true", "add trait.empathy 1", "remember You told the Night Owl the truth, and took your time over it."],
+		 "say": "iris", "text": "...I'll leave the radio on anyway. For the hum."}
+	],
+	"iris_book": [
+		{"do": ["add trait.bythebook 1"], "say": "iris", "text": "I'm always by my phone, Detective. That's the whole trouble."}
+	],
+	"iris_cold": [
+		{"do": ["add trait.cynicism 1"], "say": "iris", "text": "People keep telling me that."}
+	],
+
+	"clipboard": [
+		{"if": "clue.call_sheet", "say": "me", "text": "Blank after 1:04. Tidy handwriting, right up until there isn't any."},
+		{"if": "clue.call_sheet", "end": true},
+		{"say": "me", "text": "Call sheet. The producer screens each caller and writes them up for the host. 'Walter, line two, his ex-wife's new boat.'"},
+		{"do": ["clue call_sheet"], "say": "me", "text": "Last entry, 1:04. After that, nothing. Either the city ran out of lonely people at four minutes past one, or somebody put the pencil down."}
+	],
+
+	"bin": [
+		{"if": "clue.letter", "say": "me", "text": "Takeout menus and a parking ticket from 1987. He was contesting it on principle."},
+		{"if": "clue.letter", "end": true},
+		{"say": "me", "text": "Wastebasket. Takeout menus, a parking ticket, and one sheet of station letterhead balled up tight. Somebody threw that with feeling."},
+		{"choice": [
+			{"text": "[Unfold the letter.]", "goto": "bin_letter"},
+			{"text": "[Leave it.]", "goto": "end"}
+		]}
+	],
+	"bin_letter": [
+		{"say": "", "text": "'Gordon - effective Friday, I'm done. Coastal have offered me syndication and a chair that reclines. Typed 12:40 a.m., between the weather and the lonely. - D.'"},
+		{"say": "", "text": "Across it, in red pen and a different hand: 'Over my dead body. - G.'"},
+		{"do": ["clue letter"], "say": "me", "text": "Close."},
+		{"say": "pike", "text": "He typed the time on his own resignation letter?"},
+		{"say": "me", "text": "Radio man. They log everything. It's how they know they were there."}
+	],
+
+	"trophy": [
+		{"if": "clue.trophy", "say": "me", "text": "Voice of the City, 1989. It got the last word after all."},
+		{"if": "clue.trophy", "end": true},
+		{"say": "me", "text": "Golden Microphone, 1989. 'Voice of the City.' Brass on a marble base. The shelf has a year of dust on it, and this is sitting in a clean square slightly too big for it."},
+		{"say": "me", "text": "Picked up, put back, and wiped. It's the shiniest thing in the building, careers included."},
+		{"choice": [
+			{"text": "[Check the base.]", "goto": "trophy_base"},
+			{"text": "[Leave it.]", "goto": "end"}
+		]}
+	],
+	"trophy_base": [
+		{"do": ["clue trophy"], "say": "me", "text": "They wiped the brass and forgot the engraving. There's blood in the second nine of 1989."},
+		{"say": "pike", "text": "The murder weapon was his own award?"},
+		{"say": "me", "text": "It was within reach. Nobody walks in planning to kill a man with his own shelf."}
+	],
+
+	"on_air": [
+		{"say": "me", "text": "ON AIR. Still lit. Nobody's told the sign."}
+	],
+
+	"clock": [
+		{"say": "me", "text": "Runs four minutes fast. In radio that isn't a fault, it's a policy."}
+	],
+
+	"poster": [
+		{"say": "me", "text": "'Dez Calloway - The Small Hours.' The publicity photo. Fifteen years and one hairline ago."},
+		{"say": "me", "text": "He's pointing at the camera. They always point. As though you were the one who'd rung in."}
+	],
+
+	"reel": [
+		{"if": "clue.reel_tape and clue.reel_threading", "say": "me", "text": "Seventy minutes of a man's better nights, going round and round with nothing left on it."},
+		{"if": "clue.reel_tape and clue.reel_threading", "end": true},
+		{"if": "not clue.reel_tape", "goto": "reel_first"},
+		{"say": "me", "text": "The emergency reel. Run right out, and still turning."},
+		{"goto": "reel_look"}
+	],
+	"reel_first": [
+		{"say": "me", "text": "Reel-to-reel deck. The take-up reel's full and the tail of the tape is slapping round and round. Nobody stopped it. It just ran out."},
+		{"say": "me", "text": "Label on the box: 'IN CASE OF DEZ - 70 min. - M.Q.'"},
+		{"say": "pike", "text": "In case of Dez what?"},
+		{"do": ["clue reel_tape"], "say": "me", "text": "In case of Dez, Pike. I'm told it's a complete sentence once you've met him."},
+		{"goto": "reel_look"}
+	],
+	"reel_look": [
+		{"choice": [
+			{"text": "[Look at how the tape is threaded.]", "goto": "reel_threading"},
+			{"text": "[Step back.]", "goto": "end"}
+		]}
+	],
+	"reel_threading": [
+		{"say": "me", "text": "The tape skips the tension arm altogether. Straight off the reel and across the heads. It'll play like that. It'll also spill at the end, which it did."},
+		{"do": ["clue reel_threading"], "say": "me", "text": "It works the way a necktie works as a belt. Whoever did this had seen it done. They'd never done it."}
+	],
+
+	"cabinet": [
+		{"if": "clue.cabinet", "say": "me", "text": "One empty slot, marked EMERGENCY. Somebody agreed that it was."},
+		{"if": "clue.cabinet", "end": true},
+		{"say": "me", "text": "Tape cabinet. Steel, with a proper lock, standing open. One empty slot, and a label under it: EMERGENCY."},
+		{"say": "pike", "text": "No scratches on the lock, {sir}. I checked twice. The second time was for fun."},
+		{"do": ["clue cabinet"], "say": "me", "text": "So it was opened with a key, by someone who didn't think to lock up afterwards. People in a hurry are tidy about the wrong things."}
+	]
+}

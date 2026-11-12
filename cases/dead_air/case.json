@@ -1,0 +1,140 @@
+{
+	"id": "dead_air",
+	"title": "Dead Air",
+	"blurb": "A late-night radio host is found dead in his booth. The show carried on without him.",
+	"order": 1,
+	"start_room": "booth",
+	"intro": "intro",
+
+	"defaults": {
+		"gordon_cracks": 0,
+		"marla_trust": 0
+	},
+
+	"characters": {
+		"me": {"color": "#e0a050"},
+		"pike": {"name": "Officer Pike", "color": "#7fb0e0"},
+		"marla": {"name": "Marla Quint", "color": "#c890c0"},
+		"gordon": {"name": "Gordon Hale", "color": "#c8c080"},
+		"iris": {"name": "Line Three", "color": "#90c8a0"}
+	},
+
+	"clues": {
+		"tod": {
+			"title": "Time of death",
+			"text": "Between 1:00 and 2:00 a.m., says the coroner. The show stayed on the air until 2:40."
+		},
+		"wound": {
+			"title": "One blow, from behind",
+			"text": "Struck once on the back of the head while seated. He didn't turn round for whoever came in."
+		},
+		"trophy": {
+			"title": "The Golden Microphone",
+			"text": "Dez's 1989 award. Recently moved and wiped clean, but there is blood in the engraving. The weapon was already in the room; nobody arrived planning this."
+		},
+		"reel_tape": {
+			"title": "The emergency reel",
+			"text": "Labelled 'IN CASE OF DEZ - 70 min. - M.Q.' A canned show, left running until the tape ran out."
+		},
+		"reel_threading": {
+			"title": "Clumsy threading",
+			"text": "The tape bypasses the tension arm. Whoever loaded the deck had watched it done, and never done it."
+		},
+		"cabinet": {
+			"title": "The tape cabinet",
+			"text": "Opened with a key, not forced. The slot marked EMERGENCY is empty."
+		},
+		"call_sheet": {
+			"title": "The call sheet",
+			"text": "The producer's handwritten log of screened callers. The last entry is at 1:04 a.m."
+		},
+		"letter": {
+			"title": "Resignation letter",
+			"text": "Dez quit, effective Friday, for a syndication deal. Typed at 12:40 a.m. tonight. Across it in red pen: 'Over my dead body. - G.'"
+		},
+		"iris_statement": {
+			"title": "The Night Owl's account",
+			"text": "Iris was put on hold at 1:26. Dez's last words to her: 'The Boss just walked in.' Her call that aired at 2:15 was a repeat from March."
+		},
+		"marla_statement": {
+			"title": "Marla's account",
+			"text": "She walked out at 1:04, after Dez told her he was leaving without her. She made the emergency tape and says she didn't play it tonight. Dez called her 'the Boss' on air."
+		},
+		"gordon_car": {
+			"title": "Gordon's car",
+			"text": "Marla saw Gordon Hale's car in the station lot when she left at 1:04 a.m."
+		}
+	},
+
+	"deductions": [
+		{
+			"id": "tape_alibi",
+			"needs": ["tod", "reel_tape"],
+			"title": "Dead man talking",
+			"text": "Seventy minutes of tape, run dry at 2:40. So somebody started it at half past one. After that, Dez wasn't on the air. His greatest hits were. Anyone whose alibi is 'I heard him on the radio' has an alibi for a tape recorder."
+		},
+		{
+			"id": "amateur",
+			"needs": ["reel_threading", "cabinet"],
+			"title": "A key, and no craft",
+			"text": "Whoever started that tape had a key to the cabinet and no idea how to thread the deck. That's a short list. It's shorter if you take off the people who do it for a living."
+		},
+		{
+			"id": "empty_chair",
+			"needs": ["call_sheet", "iris_statement"],
+			"title": "Nobody at the board",
+			"text": "The screening stops at 1:04, and at 1:26 the Owl gets straight through to Dez. Nobody was in the control room. And then 'the Boss' walked in. Which would be more useful if this station didn't have two of them."
+		}
+	],
+
+	"no_connection": [
+		"Those two don't add up. I've had marriages like that.",
+		"No. That's two facts standing near each other.",
+		"If there's a link there, it's keeping to itself.",
+		"Not everything in a dead man's room is about him being dead."
+	],
+
+	"triggers": [
+		{"id": "pike_nudge", "if": "gordon_cracks >= 2", "run": "pike_nudge"}
+	],
+
+	"outcomes": {
+		"gordon_solid": "Solved. The case will hold.",
+		"gordon_thin": "Solved, more or less.",
+		"marla_wrong": "Closed. Not solved."
+	},
+
+	"epilogue": [
+		{
+			"if": "outcome == \"gordon_solid\"",
+			"text": "Gordon Hale was charged with the murder of Desmond Calloway. The insurer declined to pay out. Halcyon FM now plays uninterrupted soft jazz from midnight to four, and its ratings are up."
+		},
+		{
+			"if": "outcome == \"gordon_thin\"",
+			"text": "Gordon Hale was charged. His lawyer has described the evidence as 'atmospheric'. The trial is set for spring. The DA has stopped returning your calls, which you are choosing to read as confidence."
+		},
+		{
+			"if": "outcome == \"marla_wrong\"",
+			"text": "Marla Quint was charged with the murder of Desmond Calloway. Gordon Hale collected on the key-man policy and sold the frequency. Something about the way that tape was threaded still keeps you up at night, which at least suits the case."
+		},
+		{
+			"if": "world.lied_to_marla and outcome != \"marla_wrong\"",
+			"text": "Marla Quint has asked the evidence room for a copy of Dez's letter. She says she'd like to read the part about her."
+		},
+		{
+			"if": "world.lied_to_marla and outcome == \"marla_wrong\"",
+			"text": "Marla's lawyer has entered the resignation letter into evidence. She has now read all of it."
+		},
+		{
+			"if": "world.iris_kind",
+			"text": "The Night Owl still calls the station most nights. The answering machine has never once interrupted her."
+		},
+		{
+			"if": "world.lingered_on_drink",
+			"text": "Three years, two months, and one long look. You haven't mentioned it to anyone. You've noticed that you haven't."
+		},
+		{
+			"text": "Officer Pike has started a notebook titled 'Things The Book Doesn't Say'. It is filling up."
+		}
+	]
+}
